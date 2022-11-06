@@ -20,6 +20,8 @@ contains
                                     &enclosed by opening symbols `bracket` &
                                     &and automatically determined closing symbols', &
                                     test_enclose_autoclose) &
+                     , new_unittest('`enclose(string, bracket, .false.)` returns `bracket//string//bracket`', &
+                                    test_enclose_autoclose_false) &
                      ]
     end subroutine collect
 
@@ -76,6 +78,32 @@ contains
         call check(error, str_enclosed, "123abcalphanumericcba321", &
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumericcba321")
     end subroutine test_enclose_autoclose
+
+    !>test the procedure `[[enclose]]` with the arguments `bracket` and `autoclose`.
+    !>
+    !>This test is checking that
+    !>
+    !>- `enclose(string, bracket, autoclose=.false.)` returns `bracket//string//bracket`
+    !>
+    subroutine test_enclose_autoclose_false(error)
+        implicit none
+        type(error_type), allocatable, intent(out) :: error
+            !! error handler
+
+        character(:), allocatable :: str_enclosed
+
+        str_enclosed = enclose("string", "[", .false.)
+        call check(error, str_enclosed, "[string[", &
+                   message="expected value "//str_enclosed//" is not the actual value [string[")
+
+        str_enclosed = enclose("string", "'[({", .false.)
+        call check(error, str_enclosed, "'[({string'[({", &
+                   message="expected value "//str_enclosed//" is not the actual value '[({string'[({")
+
+        str_enclosed = enclose("alphanumeric", "123abc", .false.)
+        call check(error, str_enclosed, "123abcalphanumeric123abc", &
+                   message="expected value "//str_enclosed//" is not the actual value 123abcalphanumeric123abc")
+    end subroutine test_enclose_autoclose_false
 end module test_mod_enclose
 
 program test_enclose
