@@ -19,6 +19,12 @@ contains
                      ]
     end subroutine collect
 
+    !>test the procedure `[[enclose]]` with the arguments `open` and `close`.
+    !>
+    !>This test is checking that
+    !>
+    !>- `enclose(string, open, close)` returns the string `open//string//close`
+    !>
     subroutine test_enclose_open_close(error)
         implicit none
         type(error_type), allocatable, intent(out) :: error
