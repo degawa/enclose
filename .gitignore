@@ -1,0 +1,64 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Results
+.ipynb_checkpoints
+*.avi
+*.pptx
+*.zip
+*.bmp
+*.csv
+*.vts
+*.vtr
+*.log
+
+# Settings and Documents
+*.ini
+*.htm
+*.ipynb
+*.bat
+*.txt
+.vscode/*
+.fortls
+*.lnk
+
+# Created files and Directories
+*.ilk
+*.pdb
+build*/
+
+# Directories
+bin/
+include/
+lib/
+api-doc/
