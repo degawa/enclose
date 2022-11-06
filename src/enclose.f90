@@ -9,6 +9,12 @@ module strings_enclose
     end interface
 
 contains
+    !>Returns string enclosed by `open` and `close` symbols.
+    !>
+    !>```Fortran
+    !>print *, enclose_open_close("string", "[", "]") ! "[string]"
+    !>print *, enclose_open_close("string", "[[", "]]") ! "[[string]]"
+    !>```
     function enclose_open_close(str, open, close) result(str_enclosed)
         implicit none
         !&<
