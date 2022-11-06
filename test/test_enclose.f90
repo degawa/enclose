@@ -16,6 +16,10 @@ contains
         test_suite = [ &
                      new_unittest('`enclose(string, open, close)` returns `open//string//close`', &
                                   test_enclose_open_close) &
+                     , new_unittest('`enclose(string, bracket)` returns a string &
+                                    &enclosed by opening symbols `bracket` &
+                                    &and automatically determined closing symbols', &
+                                    test_enclose_autoclose) &
                      ]
     end subroutine collect
 
@@ -45,6 +49,25 @@ contains
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumeric123abc")
     end subroutine test_enclose_open_close
 
+    subroutine test_enclose_autoclose(error)
+        implicit none
+        type(error_type), allocatable, intent(out) :: error
+            !! error handler
+
+        character(:), allocatable :: str_enclosed
+
+        str_enclosed = enclose("string", "[")
+        call check(error, str_enclosed, "[string]", &
+                   message="expected value "//str_enclosed//" is not the actual value [string]")
+
+        str_enclosed = enclose("string", "'[({")
+        call check(error, str_enclosed, "'[({string})]'", &
+                   message="expected value "//str_enclosed//" is not the actual value '[({string})]'")
+
+        str_enclosed = enclose("alphanumeric", "123abc")
+        call check(error, str_enclosed, "123abcalphanumericcba321", &
+                   message="expected value "//str_enclosed//" is not the actual value 123abcalphanumericcba321")
+    end subroutine test_enclose_autoclose
 end module test_mod_enclose
 
 program test_enclose
