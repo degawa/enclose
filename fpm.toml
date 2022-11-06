@@ -1,0 +1,15 @@
+name = "enclose"
+version = "0.1.0"
+license = "license"
+author = "Tomohiro Degawa"
+maintainer = "https://github.com/degawa"
+copyright = "Copyright 2022, Tomohiro Degawa"
+
+[build]
+auto-executables = false
+auto-tests = true
+auto-examples = true
+
+[install]
+library = true
+
