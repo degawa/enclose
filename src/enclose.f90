@@ -40,6 +40,38 @@ contains
         str_enclosed = open//str//close
     end function enclose_open_close
 
+    !>Returns string enclosed by `bracket` symbols.
+    !>
+    !>`bracket` symbol specifies **opening** bracket symbols.
+    !>Closing symbols are automatically determined.
+    !>
+    !>When optional argumet `autoclose` is `.false.`,
+    !>closing symbols are the same as the opening symbols.
+    !>
+    !>The paired opening and closing symbols are as follows:
+    !>
+    !>| opening symbol | closing symbol |
+    !>| :------------: | :------------: |
+    !>|      `(`       |      `)`       |
+    !>|      `<`       |      `>`       |
+    !>|      `[`       |      `]`       |
+    !>|      `{`       |      `}`       |
+    !>|      `)`       |      `(`       |
+    !>|      `>`       |      `<`       |
+    !>|      `]`       |      `[`       |
+    !>|      `}`       |      `{`       |
+    !>
+    !>For other symbols, including alphanumeric characters,
+    !>the same symbols are chosen as the closing symbols.
+    !>
+    !>```Fortran
+    !>print *, enclose_autoclose("string", "'")                       ! "'string'"
+    !>print *, enclose_autoclose("string", "([<{")                    ! "([<{string}>])"
+    !>print *, enclose_autoclose("string", "([<{", autoclose=.true.)  ! "([<{string}>])"
+    !>print *, enclose_autoclose("string", "([<{", autoclose=.false.) ! "([<{string([<{"
+    !>print *, enclose_autoclose("string", "abc")                     ! "abcstringcba"
+    !>print *, enclose_autoclose("string", "abc", autoclose=.false.)  ! "abcstringabc"
+    !>```
     function enclose_autoclose(str, bracket, autoclose) result(str_enclosed)
         implicit none
         !&<
@@ -59,6 +91,7 @@ contains
         autoclosing = autoclose_default_value
         if (present(autoclose)) autoclosing = autoclose
 
+        ! enclose using `bracket` as the opening and closing symbols
         block
             if (.not. autoclosing) then
                 str_enclosed = enclose_open_close(str, bracket, bracket)
@@ -66,6 +99,8 @@ contains
             end if
         end block
 
+        ! enclose using `bracket` as the opening symbols and
+        ! auto-determined closing symbols
         block
             character(:), allocatable :: close
                 !! closing symbols
@@ -75,6 +110,9 @@ contains
 
             close = ""
 
+            ! the order of closing brackets becomes
+            ! the reverse of the opening brackets
+            ! ex) When `bracket` are "({<", `close` must be ">})" not ")}>".
             do pos = len(bracket), 1, -1
                 close = close//get_closing_symbol(bracket(pos:pos))
             end do
@@ -83,6 +121,7 @@ contains
             return
         end block
     contains
+        !>Returns a closing symbol.
         function get_closing_symbol(char) result(close)
             implicit none
             character, intent(in) :: char
@@ -91,6 +130,10 @@ contains
                 !! A closing symbol
 
             integer(int32) :: pos
+
+            ! If an opening symbol is in the parameter `bracket_open` at `pos`,
+            ! the closing symbol is in the parameter `bracket_close` at `pos`.
+            ! If not, the opening symbol is used as the closing symbol.
             pos = index(bracket_open, char)
             if (pos >= 1) then ! if `substring` is not in `string`, `index(string, substring)` returns 0
                 close = bracket_close(pos:pos)
