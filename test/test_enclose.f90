@@ -49,6 +49,14 @@ contains
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumeric123abc")
     end subroutine test_enclose_open_close
 
+    !>test the procedure `[[enclose]]` with the argument `bracket`.
+    !>
+    !>This test is checking that
+    !>
+    !>- `enclose(string, bracket)` returns returns a string
+    !>enclosed by opening symbols `bracket`
+    !>and automatically determined closing symbols
+    !>
     subroutine test_enclose_autoclose(error)
         implicit none
         type(error_type), allocatable, intent(out) :: error
