@@ -24,7 +24,7 @@ contains
     !>print *, enclose_open_close("string", "[", "]") ! "[string]"
     !>print *, enclose_open_close("string", "[[", "]]") ! "[[string]]"
     !>```
-    function enclose_open_close(str, open, close) result(str_enclosed)
+    pure function enclose_open_close(str, open, close) result(str_enclosed)
         implicit none
         !&<
         character(*), intent(in) :: str
@@ -72,7 +72,7 @@ contains
     !>print *, enclose_autoclose("string", "abc")                     ! "abcstringcba"
     !>print *, enclose_autoclose("string", "abc", autoclose=.false.)  ! "abcstringabc"
     !>```
-    function enclose_autoclose(str, bracket, autoclose) result(str_enclosed)
+    pure function enclose_autoclose(str, bracket, autoclose) result(str_enclosed)
         implicit none
         !&<
         character(*), intent(in)            :: str
@@ -122,7 +122,7 @@ contains
         end block
     contains
         !>Returns a closing symbol.
-        function get_closing_symbol(char) result(close)
+        pure function get_closing_symbol(char) result(close)
             implicit none
             character, intent(in) :: char
                 !! An opening symbol
