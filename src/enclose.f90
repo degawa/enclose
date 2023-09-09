@@ -9,7 +9,7 @@ module strings_enclose
         procedure :: enclose_autoclose
     end interface
 
-    character(*), private, parameter :: bracket_open =  "(<[{)>]}" !&
+    character(*), private, parameter :: bracket_open  = "(<[{)>]}" !&
         !! opening symbols
     character(*), private, parameter :: bracket_close = ")>]}(<[{"
         !! closing symbols paired with the opening ones
