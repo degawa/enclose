@@ -3,7 +3,7 @@ version = "0.1.0"
 license = "license"
 author = "Tomohiro Degawa"
 maintainer = "https://github.com/degawa"
-copyright = "Copyright 2022, Tomohiro Degawa"
+copyright = "Copyright 2023, Tomohiro Degawa"
 
 [build]
 auto-executables = false
