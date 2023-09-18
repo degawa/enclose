@@ -3,6 +3,7 @@ module strings_enclose
     implicit none
     private
     public :: enclose
+    public :: get_closing_symbol
 
     interface enclose
         procedure :: enclose_open_close
@@ -120,26 +121,42 @@ contains
             str_enclosed = enclose_open_close(str, bracket, close)
             return
         end block
-    contains
-        !>Returns a closing symbol.
-        pure function get_closing_symbol(char) result(close)
-            implicit none
-            character, intent(in) :: char
-                !! An opening symbol
-            character :: close
-                !! A closing symbol
-
-            integer(int32) :: pos
-
-            ! If an opening symbol is in the parameter `bracket_open` at `pos`,
-            ! the closing symbol is in the parameter `bracket_close` at `pos`.
-            ! If not, the opening symbol is used as the closing symbol.
-            pos = index(bracket_open, char)
-            if (pos >= 1) then ! if `substring` is not in `string`, `index(string, substring)` returns 0
-                close = bracket_close(pos:pos)
-            else
-                close = char
-            end if
-        end function get_closing_symbol
     end function enclose_autoclose
+
+    !>Returns the closing symbol paired with an opening symbol.
+    !>
+    !>The paired opening and closing symbols are as follows:
+    !>
+    !>| opening symbol | closing symbol |
+    !>| :------------: | :------------: |
+    !>|      `(`       |      `)`       |
+    !>|      `<`       |      `>`       |
+    !>|      `[`       |      `]`       |
+    !>|      `{`       |      `}`       |
+    !>|      `)`       |      `(`       |
+    !>|      `>`       |      `<`       |
+    !>|      `]`       |      `[`       |
+    !>|      `}`       |      `{`       |
+    !>
+    !>For other symbols, including alphanumeric characters,
+    !>the same symbols are chosen as the closing symbols.
+    pure function get_closing_symbol(opening_symbol) result(closing_symbol)
+        implicit none
+        character, intent(in) :: opening_symbol
+            !! An opening symbol
+        character :: closing_symbol
+            !! A closing symbol
+
+        integer(int32) :: pos
+
+        ! If an opening symbol is in the parameter `bracket_open` at `pos`,
+        ! the closing symbol is in the parameter `bracket_close` at `pos`.
+        ! If not, the opening symbol is used as the closing symbol.
+        pos = index(bracket_open, opening_symbol)
+        if (pos >= 1) then ! if `substring` is not in `string`, `index(string, substring)` returns 0
+            closing_symbol = bracket_close(pos:pos)
+        else
+            closing_symbol = opening_symbol
+        end if
+    end function get_closing_symbol
 end module strings_enclose
