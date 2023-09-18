@@ -41,14 +41,17 @@ contains
         str_enclosed = enclose("string", "[", "]")
         call check(error, str_enclosed, "[string]", &
                    message="expected value "//str_enclosed//" is not the actual value [string]")
+        if (occurred(error)) return
 
         str_enclosed = enclose("string", "'[({", "})]'")
         call check(error, str_enclosed, "'[({string})]'", &
                    message="expected value "//str_enclosed//" is not the actual value '[({string})]'")
+        if (occurred(error)) return
 
         str_enclosed = enclose("alphanumeric", "123abc", "123abc")
         call check(error, str_enclosed, "123abcalphanumeric123abc", &
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumeric123abc")
+        if (occurred(error)) return
     end subroutine test_enclose_open_close
 
     !>test the procedure `[[enclose]]` with the argument `bracket`.
@@ -69,14 +72,17 @@ contains
         str_enclosed = enclose("string", "[")
         call check(error, str_enclosed, "[string]", &
                    message="expected value "//str_enclosed//" is not the actual value [string]")
+        if (occurred(error)) return
 
         str_enclosed = enclose("string", "'[({")
         call check(error, str_enclosed, "'[({string})]'", &
                    message="expected value "//str_enclosed//" is not the actual value '[({string})]'")
+        if (occurred(error)) return
 
         str_enclosed = enclose("alphanumeric", "123abc")
         call check(error, str_enclosed, "123abcalphanumericcba321", &
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumericcba321")
+        if (occurred(error)) return
     end subroutine test_enclose_autoclose
 
     !>test the procedure `[[enclose]]` with the arguments `bracket` and `autoclose`.
@@ -95,14 +101,17 @@ contains
         str_enclosed = enclose("string", "[", .false.)
         call check(error, str_enclosed, "[string[", &
                    message="expected value "//str_enclosed//" is not the actual value [string[")
+        if (occurred(error)) return
 
         str_enclosed = enclose("string", "'[({", .false.)
         call check(error, str_enclosed, "'[({string'[({", &
                    message="expected value "//str_enclosed//" is not the actual value '[({string'[({")
+        if (occurred(error)) return
 
         str_enclosed = enclose("alphanumeric", "123abc", .false.)
         call check(error, str_enclosed, "123abcalphanumeric123abc", &
                    message="expected value "//str_enclosed//" is not the actual value 123abcalphanumeric123abc")
+        if (occurred(error)) return
     end subroutine test_enclose_autoclose_false
 end module test_mod_enclose
 
