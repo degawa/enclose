@@ -16,9 +16,9 @@ contains
         test_suite = [ &
                      new_unittest('`enclose(string, open, close)` returns `open//string//close`', &
                                   test_enclose_open_close) &
-                     , new_unittest('`enclose(string, bracket)` returns a string &
-                                    &enclosed by opening symbols `bracket` &
-                                    &and automatically determined closing symbols', &
+                     , new_unittest('`enclose(string, bracket)` returns a string ' &
+                                    //'enclosed by opening symbols `bracket`' &
+                                    //'and automatically determined closing symbols', &
                                     test_enclose_autoclose) &
                      , new_unittest('`enclose(string, bracket, .false.)` returns `bracket//string//bracket`', &
                                     test_enclose_autoclose_false) &
