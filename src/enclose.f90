@@ -4,6 +4,7 @@ module strings_enclose
     private
     public :: enclose
     public :: get_closing_symbol
+    public :: get_closing_brackets
 
     interface enclose
         procedure :: enclose_open_close
@@ -102,26 +103,46 @@ contains
 
         ! enclose using `bracket` as the opening symbols and
         ! auto-determined closing symbols
-        block
-            character(:), allocatable :: close
-                !! closing symbols
-            integer(int32) :: pos
-                !! position (array index) of a opening bracket
-                !! in `bracket_open`
-
-            close = ""
-
-            ! the order of closing brackets becomes
-            ! the reverse of the opening brackets
-            ! ex) When `bracket` are "({<", `close` must be ">})" not ")}>".
-            do pos = len(bracket), 1, -1
-                close = close//get_closing_symbol(bracket(pos:pos))
-            end do
-
-            str_enclosed = enclose_open_close(str, bracket, close)
-            return
-        end block
+        str_enclosed = enclose_open_close(str, bracket, get_closing_brackets(bracket))
     end function enclose_autoclose
+
+    !>Returns the closing brackets paired with an opening brackets.
+    !>The closing brackets are in reverse order of the opening brackets.
+    !>
+    !>The paired opening and closing symbols are as follows:
+    !>
+    !>| opening symbol | closing symbol |
+    !>| :------------: | :------------: |
+    !>|      `(`       |      `)`       |
+    !>|      `<`       |      `>`       |
+    !>|      `[`       |      `]`       |
+    !>|      `{`       |      `}`       |
+    !>|      `)`       |      `(`       |
+    !>|      `>`       |      `<`       |
+    !>|      `]`       |      `[`       |
+    !>|      `}`       |      `{`       |
+    !>
+    !>For other symbols, including alphanumeric characters,
+    !>the same symbols are chosen as the closing symbols.
+    pure function get_closing_brackets(opening_brackets) result(closing_bracekts)
+        implicit none
+        character(*), intent(in) :: opening_brackets
+            !! An opening brackets
+        character(:), allocatable :: closing_bracekts
+            !! A closing brackets
+
+        integer(int32) :: pos
+        !! position (array index) of a opening bracket
+        !! in `bracket_open`
+
+        closing_bracekts = ""
+
+        ! The closing brackets are in reverse order of the opening brackets.
+        ! ex) When `bracket` are "({<", `close` must be ">})" not ")}>".
+        do pos = len(opening_brackets), 1, -1
+            closing_bracekts = closing_bracekts//get_closing_symbol(opening_brackets(pos:pos))
+        end do
+    end function get_closing_brackets
 
     !>Returns the closing symbol paired with an opening symbol.
     !>
