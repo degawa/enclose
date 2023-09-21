@@ -28,6 +28,12 @@ contains
                      , new_unittest('`get_closing_symbol(opening_symbol)` returns the same symbol ' &
                                     //'when the `opening_symbol` does not have the paired opening symbol', &
                                     test_get_closing_symbol_non_paired_opening_symbol) &
+                     , new_unittest('`get_closing_brackets(opening_brackets)` returns the closing brackets ' &
+                                    //'paired with an opening symbol in the reverse order of the opening brackets', &
+                                    test_get_closing_brackets) &
+                     , new_unittest('`get_closing_brackets(opening_brackets)` returns the closing brackets ' &
+                                    //'that are the same as the opening ones in the reverse order of the opening brackets.', &
+                                    test_get_closing_brackets_non_paired_opening_symbol) &
                      ]
     end subroutine collect
 
@@ -64,7 +70,7 @@ contains
     !>
     !>This test is checking that
     !>
-    !>- `enclose(string, bracket)` returns returns a string
+    !>- `enclose(string, bracket)` returns a string
     !>enclosed by opening symbols `bracket`
     !>and automatically determined closing symbols
     !>
@@ -484,6 +490,63 @@ contains
                    message="expected value "//closing_symbol//" is not the actual value ?")
         if (occurred(error)) return
     end subroutine test_get_closing_symbol_non_paired_opening_symbol
+
+    !>test the procedure `[[get_closing_brackets]]` with the argument `opening_brackets`.
+    !>
+    !>This test is checking that
+    !>
+    !>- `get_closing_brackets(opening_brackets)` returns a string of
+    !>closing symbols paired with opening ones
+    !>in the reverse order of the opening brackets.
+    !>
+    subroutine test_get_closing_brackets(error)
+        implicit none
+        type(error_type), allocatable, intent(out) :: error
+            !! error handler
+
+        character(:), allocatable :: closing_brackets
+
+        closing_brackets = get_closing_brackets("[")
+        call check(error, closing_brackets, "]", &
+                   message="expected value "//closing_brackets//" is not the actual value ]")
+        if (occurred(error)) return
+
+        closing_brackets = get_closing_brackets("[({<")
+        call check(error, closing_brackets, ">})]", &
+                   message="expected value "//closing_brackets//" is not the actual value >})]")
+        if (occurred(error)) return
+    end subroutine test_get_closing_brackets
+
+    !>test the procedure `[[get_closing_brackets]]` with the argument `opening_brackets`.
+    !>
+    !>This test is checking that
+    !>
+    !>- `get_closing_brackets(opening_brackets)` returns a string of
+    !>closing symbols that are the same as the opening ones
+    !>in the reverse order of the opening brackets.
+    !>
+    subroutine test_get_closing_brackets_non_paired_opening_symbol(error)
+        implicit none
+        type(error_type), allocatable, intent(out) :: error
+            !! error handler
+
+        character(:), allocatable :: closing_brackets
+
+        closing_brackets = get_closing_brackets("abcdefghijklmnopqrstuvwxyz")
+        call check(error, closing_brackets, "zyxwvutsrqponmlkjihgfedcba", &
+                   message="expected value "//closing_brackets//" is not the actual value zyxwvutsrqponmlkjihgfedcba")
+        if (occurred(error)) return
+
+        closing_brackets = get_closing_brackets("1234567890")
+        call check(error, closing_brackets, "0987654321", &
+                   message="expected value "//closing_brackets//" is not the actual value 0987654321")
+        if (occurred(error)) return
+
+        closing_brackets = get_closing_brackets("!@#$%^&*-_=+\|`~;:""',./?")
+        call check(error, closing_brackets, "?/.,'"":;~`|\+=_-*&^%$#@!", &
+                   message="expected value "//closing_brackets//" is not the actual value ?/.,'"":;~`|\+=_-*&^%$#@!")
+        if (occurred(error)) return
+    end subroutine test_get_closing_brackets_non_paired_opening_symbol
 end module test_mod_enclose
 
 program test_enclose
