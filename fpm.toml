@@ -1,6 +1,7 @@
 name = "enclose"
+description = "provide procedures for enclosing a string in brackets"
 version = "0.3.0"
-license = "license"
+license = "MIT"
 author = "Tomohiro Degawa"
 maintainer = "https://github.com/degawa"
 copyright = "Copyright 2023, Tomohiro Degawa"
