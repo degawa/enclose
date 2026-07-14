@@ -37,7 +37,7 @@ contains
             !! Closing bracket symbols
         !&>
         character(:), allocatable :: str_enclosed
-            !! An string enclosed by opening and closing symbols
+            !! A string enclosed by opening and closing symbols
 
         str_enclosed = open//str//close
     end function enclose_open_close
@@ -47,7 +47,7 @@ contains
     !>`bracket` symbol specifies **opening** bracket symbols.
     !>Closing symbols are automatically determined.
     !>
-    !>When optional argumet `autoclose` is `.false.`,
+    !>When optional argument `autoclose` is `.false.`,
     !>closing symbols are the same as the opening symbols.
     !>
     !>The paired opening and closing symbols are as follows:
@@ -86,7 +86,7 @@ contains
             !! as the pair of opening symbols
         !&>
         character(:), allocatable :: str_enclosed
-            !! An string enclosed by opening and closing symbols
+            !! A string enclosed by opening and closing symbols
 
         logical :: autoclosing
 
@@ -94,16 +94,16 @@ contains
         if (present(autoclose)) autoclosing = autoclose
 
         if (autoclosing) then
-        ! enclose using `bracket` as the opening symbols and
-        ! auto-determined closing symbols
-        str_enclosed = enclose_open_close(str, bracket, get_closing_brackets(bracket))
+            ! enclose using `bracket` as the opening symbols and
+            ! auto-determined closing symbols
+            str_enclosed = enclose_open_close(str, bracket, get_closing_brackets(bracket))
         else
             ! enclose using `bracket` as the opening and closing symbols
             str_enclosed = enclose_open_close(str, bracket, bracket)
         end if
     end function enclose_autoclose
 
-    !>Returns the closing brackets paired with an opening brackets.
+    !>Returns the closing brackets paired with the opening brackets.
     !>The closing brackets are in reverse order of the opening brackets.
     !>
     !>The paired opening and closing symbols are the same as those
