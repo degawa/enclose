@@ -93,17 +93,14 @@ contains
         autoclosing = autoclose_default_value
         if (present(autoclose)) autoclosing = autoclose
 
-        ! enclose using `bracket` as the opening and closing symbols
-        block
-            if (.not. autoclosing) then
-                str_enclosed = enclose_open_close(str, bracket, bracket)
-                return
-            end if
-        end block
-
+        if (autoclosing) then
         ! enclose using `bracket` as the opening symbols and
         ! auto-determined closing symbols
         str_enclosed = enclose_open_close(str, bracket, get_closing_brackets(bracket))
+        else
+            ! enclose using `bracket` as the opening and closing symbols
+            str_enclosed = enclose_open_close(str, bracket, bracket)
+        end if
     end function enclose_autoclose
 
     !>Returns the closing brackets paired with an opening brackets.
