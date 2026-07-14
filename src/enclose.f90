@@ -106,38 +106,35 @@ contains
     !>Returns the closing brackets paired with an opening brackets.
     !>The closing brackets are in reverse order of the opening brackets.
     !>
-    !>The paired opening and closing symbols are as follows:
-    !>
-    !>| opening symbol | closing symbol |
-    !>| :------------: | :------------: |
-    !>|      `(`       |      `)`       |
-    !>|      `<`       |      `>`       |
-    !>|      `[`       |      `]`       |
-    !>|      `{`       |      `}`       |
-    !>|      `)`       |      `(`       |
-    !>|      `>`       |      `<`       |
-    !>|      `]`       |      `[`       |
-    !>|      `}`       |      `{`       |
+    !>The paired opening and closing symbols are the same as those
+    !>described in [[get_closing_symbol]].
     !>
     !>For other symbols, including alphanumeric characters,
     !>the same symbols are chosen as the closing symbols.
-    pure function get_closing_brackets(opening_brackets) result(closing_bracekts)
+    pure function get_closing_brackets(opening_brackets) result(closing_brackets)
         implicit none
         character(*), intent(in) :: opening_brackets
-            !! An opening brackets
-        character(:), allocatable :: closing_bracekts
-            !! A closing brackets
+            !! Opening brackets
+        character(:), allocatable :: closing_brackets
+            !! Closing brackets
 
         integer(int32) :: pos
-        !! position (array index) of a opening bracket
-        !! in `bracket_open`
+            !! position (array index) of an opening bracket
+            !! in `opening_brackets`
+        integer(int32) :: len_brackets
+            !! length of `opening_brackets`
 
-        closing_bracekts = ""
+        len_brackets = len(opening_brackets)
+
+        ! Each opening symbol maps to exactly one closing symbol,
+        ! so the result length is known in advance.
+        allocate (character(len_brackets) :: closing_brackets)
 
         ! The closing brackets are in reverse order of the opening brackets.
-        ! ex) When `bracket` are "({<", `close` must be ">})" not ")}>".
-        do pos = len(opening_brackets), 1, -1
-            closing_bracekts = closing_bracekts//get_closing_symbol(opening_brackets(pos:pos))
+        ! ex) When `opening_brackets` is "({<", the result must be ">})", not ")}>".
+        do pos = 1, len_brackets
+            closing_brackets(len_brackets - pos + 1:len_brackets - pos + 1) = &
+                get_closing_symbol(opening_brackets(pos:pos))
         end do
     end function get_closing_brackets
 
