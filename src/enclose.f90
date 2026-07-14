@@ -1,5 +1,5 @@
 module strings_enclose
-    use, intrinsic :: iso_fortran_env
+    use, intrinsic :: iso_fortran_env, only: int32
     implicit none
     private
     public :: enclose
