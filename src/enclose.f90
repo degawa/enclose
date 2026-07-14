@@ -11,12 +11,12 @@ module strings_enclose
         procedure :: enclose_autoclose
     end interface
 
-    character(*), private, parameter :: bracket_open  = "(<[{)>]}" !&
+    character(*), parameter :: bracket_open  = "(<[{)>]}" !&
         !! opening symbols
-    character(*), private, parameter :: bracket_close = ")>]}(<[{"
+    character(*), parameter :: bracket_close = ")>]}(<[{"
         !! closing symbols paired with the opening ones
 
-    logical, private, parameter :: autoclose_default_value = .true.
+    logical, parameter :: autoclose_default_value = .true.
         !! the default value of the optional argument `autoclose`
 
 contains
